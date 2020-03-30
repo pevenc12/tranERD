@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<ER name = "HW1">
+<!-- Entity -->
+    <Entity name = "Team">
+        <Attribute name = "ID" type = "int" notNull = "True" PK = "True" />
+        <Attribute name = "Name" type = "varchar" bit = "20" notNull = "True" />
+        <Attribute name = "Player_ID" type = "int" bit = "20" multi = "True" />
+        <Attribute name = "Company" type = "varchar" bit = "20" />
+        <Attribute name = "Uniform" type = "composite" />
+        <Attribute name = "NextAgainst" type = "int" />
+    </Entity>
+    <Entity name = "Stadium">
+        <Attribute name = "ID" type = "int" notNull = "True" PK = "True" />
+        <Attribute name = "Name" type = "varchar" bit = "20" notNull = "True"/>
+        <Attribute name = "Address" type = "composite" />
+        <Attribute name = "Capacity" type = "int"/>
+        <Attribute name = "MotherTeam" type = "int"/>
+        <Attribute name = "Entrance" type = "varchar" bit = "20" multi = "True"/>
+    </Entity>
+    <Entity name = "Sponsor">
+        <Attribute name = "ID" type = "int" notNull = "True" PK = "True" />
+        <Attribute name = "Name" type = "varchar" bit = "20" notNull = "True"/>
+        <Attribute name = "Money" type = "int" />
+    </Entity>
+    <Entity name = "TVcompany">
+        <Attribute name = "ID" type = "int" notNull = "True" PK = "True" />
+        <Attribute name = "Name" type = "varchar" bit = "20" notNull = "True"/>
+        <Attribute name = "Anchor" type = "varchar" bit = "20" multi = "True"/>
+    </Entity>
+    <Entity name = "Vendor" weak = "True">
+        <Attribute name = "StadiumID" type = "int" notNull = "True" Part = "True" />
+        <Attribute name = "Name" type = "varchar" bit = "20" notNull = "True" PK = "True"/>
+        <Attribute name = "Goods" type = "varchar" bit = "20" multi = "True"/>
+    </Entity>
+<!-- Entity Expansion -->
+    <Entity name = "Player">
+        <Attribute name = "Name" type = "varchar" bit = "20" notNull = "True" />
+        <Attribute name = "ID" type = "int" notNull = "True" PK = "True" />
+    </Entity>
+    <Entity name = "Season">
+        <Attribute name = "Year" type = "int" notNull = "True" PK = "True" />
+        <Attribute name = "Champion" type = "int" notNull = "True" />
+    </Entity>
+    <Entity name = "Game">
+        <Attribute name = "ID" type = "int" notNull = "True" PK = "True" />
+        <Attribute name = "Date" type = "int" notNull = "True" />
+        <Attribute name = "Away" type = "int" notNull = "True" />
+        <Attribute name = "Home" type = "int" notNull = "True" />
+        <Attribute name = "Address" type = "composite" notNull = "True" />
+    </Entity>
+    <Entity name = "Statistics">
+        <Attribute name = "ID" type = "int" notNull = "True" PK = "True" />
+        <Attribute name = "Player" type = "int" notNull = "True" />
+        <Attribute name = "Team" type = "int" notNull = "True" />
+        <Attribute name = "Pos" type = "varchar" bit = "20" notNull = "True"/>
+        <Attribute name = "AVG" type = "float" notNull = "True" />
+    </Entity>
+    <Entity name = "FreeAgent">
+        <Attribute name = "Player" type = "int" notNull = "True" PK = "True" />
+    </Entity>
+
+<!-- Relation -->
+    <Relation name = "Challenge">
+        <Member name = "Team" value = "partial" Cardinality = "one" ref = "NextAgainst"/>
+        <Member name = "Team" value = "partial" Cardinality = "one" ref = "ID"/>
+    </Relation>
+    <Relation name = "Own">
+        <Member name = "Team" value = "total" Cardinality = "one" ref = "ID"/>
+        <Member name = "Stadium" value = "partial" Cardinality = "many" ref = "MotherTeam"/>
+    </Relation>
+    <Relation name = "Sponse">
+        <Member name = "Sponsor" value = "partial" Cardinality = "many" ref = "ID"/>
+        <Member name = "Team" value = "partial" Cardinality = "many" ref = "ID"/>
+    </Relation>
+    <Relation name = "Contract" >
+        <Member name = "Stadium" value = "partial" Cardinality = "one" ref = "ID"/>
+        <Member name = "Vendor" value = "total" Cardinality = "many" ref = "StadiumID"/>
+    </Relation>
+<!-- Relation Expansion -->
+    <Relation name = "IsChampion">
+        <Member name = "Season" value = "total" Cardinality = "one" ref = "Year"/>
+        <Member name = "Team" value = "partial" Cardinality = "one" ref = "ID"/>
+    </Relation>
+    <Relation name = "OnTeam">
+        <Member name = "Player" value = "total" Cardinality = "many" ref = "ID"/>
+        <Member name = "Team" value = "total" Cardinality = "one" ref = "ID"/>
+    </Relation>
+    <Relation name = "Game_Away">
+        <Member name = "Game" value = "total" Cardinality = "one" ref = "ID"/>
+        <Member name = "Team" value = "total" Cardinality = "one" ref = "ID"/>
+    </Relation>
+    <Relation name = "Game_Home">
+        <Member name = "Game" value = "total" Cardinality = "one" ref = "ID"/>
+        <Member name = "Team" value = "total" Cardinality = "one" ref = "ID"/>
+    </Relation>
+    <Relation name = "Game_Location">
+        <Member name = "Game" value = "total" Cardinality = "one" ref = "ID"/>
+        <Member name = "Stadium" value = "total" Cardinality = "one" ref = "ID"/>
+    </Relation>
+    <Relation name = "Statistics_Player">
+        <Member name = "Statistics" value = "total" Cardinality = "one" ref = "ID"/>
+        <Member name = "Player" value = "total" Cardinality = "one" ref = "ID"/>
+    </Relation>
+    <Relation name = "Statistics_Team">
+        <Member name = "Statistics" value = "total" Cardinality = "one" ref = "ID"/>
+        <Member name = "Team" value = "total" Cardinality = "one" ref = "ID"/>
+    </Relation>
+    <Relation name = "Statistics_Pos">
+        <Member name = "Statistics" value = "total" Cardinality = "one" ref = "ID"/>
+        <Member name = "Stadium" value = "total" Cardinality = "one" ref = "ID"/>
+    </Relation>
+    <Relation name = "FreeAgent">
+        <Member name = "FreeAgent" value = "total" Cardinality = "one" ref = "Player"/>
+        <Member name = "Player" value = "partial" Cardinality = "one" ref = "ID"/>
+    </Relation>
+</ER>
