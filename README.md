@@ -16,11 +16,11 @@ You must install **python3**.
 parse MLB.xml
 ```
 4. Perform database manipulation.
-+ query certain relationship of current database
++ query certain relationship of current database and prune
 ```python
 YTDB> query -r Sponse    # query only the entities and relationships that are related to Sponse
 ```
-+ query certain attribute of current database
++ query certain attribute of current database and prune
 ```python
 YTDB> query -a Address   # query all entities that conatain the "Address" attribute
 ```
